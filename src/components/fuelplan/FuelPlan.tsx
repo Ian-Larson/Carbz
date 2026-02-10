@@ -110,7 +110,11 @@ export function FuelPlan() {
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-gray-500">
-                  Add {formatScoops(bp.scoops)} scoops {bp.mixName} ({Math.round(bp.carbsGrams)}g carbs)
+                  {bp.totalGrams !== null ? (
+                    <>Add {bp.totalGrams}g {bp.mixName} ({formatScoops(bp.scoops)} scoops, {Math.round(bp.carbsGrams)}g carbs)</>
+                  ) : (
+                    <>Add {formatScoops(bp.scoops)} scoops {bp.mixName} ({Math.round(bp.carbsGrams)}g carbs) — <span className="italic text-gray-400">add gram weight in Library for scale-friendly prep</span></>
+                  )}
                 </p>
               </div>
             ))}

@@ -4,6 +4,7 @@ export const DEFAULT_DRINK_MIXES: DrinkMix[] = [
   {
     id: 'pf-carb-electrolyte',
     name: 'PF Carb & Electrolyte Mix',
+    gramsPerScoop: 25,
     carbsPerScoop: 15,
     sodiumPerScoop: 200,
     caffeinePerScoop: 0,
@@ -13,6 +14,7 @@ export const DEFAULT_DRINK_MIXES: DrinkMix[] = [
   {
     id: 'gatorade-thirst-quencher',
     name: 'Gatorade Thirst Quencher',
+    gramsPerScoop: 34,
     carbsPerScoop: 22,
     sodiumPerScoop: 300,
     caffeinePerScoop: 0,
@@ -22,6 +24,7 @@ export const DEFAULT_DRINK_MIXES: DrinkMix[] = [
   {
     id: 'skratch-labs',
     name: 'Skratch Labs',
+    gramsPerScoop: 22,
     carbsPerScoop: 19,
     sodiumPerScoop: 380,
     caffeinePerScoop: 0,
@@ -31,6 +34,7 @@ export const DEFAULT_DRINK_MIXES: DrinkMix[] = [
   {
     id: 'maurten-320',
     name: 'Maurten Drink Mix 320',
+    gramsPerScoop: 80,
     carbsPerScoop: 80,
     sodiumPerScoop: 180,
     caffeinePerScoop: 0,
@@ -40,6 +44,7 @@ export const DEFAULT_DRINK_MIXES: DrinkMix[] = [
   {
     id: 'sis-beta-fuel',
     name: 'SIS Beta Fuel',
+    gramsPerScoop: 86,
     carbsPerScoop: 40,
     sodiumPerScoop: 250,
     caffeinePerScoop: 0,

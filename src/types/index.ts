@@ -3,6 +3,7 @@
 export interface DrinkMix {
   id: string;
   name: string;
+  gramsPerScoop?: number;
   carbsPerScoop: number;
   sodiumPerScoop: number;
   caffeinePerScoop: number;
@@ -97,6 +98,7 @@ export interface BottlePrep {
   bottleSize: number;
   mixName: string;
   scoops: number;
+  totalGrams: number | null;
   carbsGrams: number;
   sodiumMg: number;
   caffeineMg: number;

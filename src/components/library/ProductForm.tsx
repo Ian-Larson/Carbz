@@ -39,6 +39,11 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
   const [servingDesc, setServingDesc] = useState(
     initial && 'servingDescription' in initial ? initial.servingDescription : '1 packet'
   );
+  const [gramsPerScoop, setGramsPerScoop] = useState<string>(
+    initial && 'gramsPerScoop' in initial && (initial as DrinkMix).gramsPerScoop != null
+      ? (initial as DrinkMix).gramsPerScoop!.toString()
+      : ''
+  );
   const [cost, setCost] = useState<string>(
     initial?.costPerServing != null ? initial.costPerServing.toString() : ''
   );
@@ -50,8 +55,10 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
     const costValue = cost ? parseFloat(cost) : undefined;
 
     if (type === 'drinkMix') {
+      const gramsValue = gramsPerScoop ? parseFloat(gramsPerScoop) : undefined;
       onSave({
         name: name.trim(),
+        gramsPerScoop: gramsValue,
         carbsPerScoop: carbs,
         sodiumPerScoop: sodium,
         caffeinePerScoop: caffeine,
@@ -89,6 +96,15 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <Field label="Name" value={name} onChange={setName} type="text" />
+          {type === 'drinkMix' && (
+            <Field
+              label="Grams per scoop"
+              value={gramsPerScoop}
+              onChange={setGramsPerScoop}
+              type="text"
+              placeholder="Weight of one scoop in grams"
+            />
+          )}
           <Field
             label={type === 'drinkMix' ? 'Carbs per scoop (g)' : 'Carbs per serving (g)'}
             value={carbs}

@@ -73,7 +73,11 @@ export function formatPlanAsText(plan: FuelPlanOutput): string {
   if (plan.bottlePreps.length > 0) {
     lines.push('--- BOTTLE PREP ---');
     for (const bp of plan.bottlePreps) {
-      lines.push(`B${bp.bottleIndex + 1}: ${bp.bottleSize}ml — ${formatScoops(bp.scoops)} scoops ${bp.mixName} (${Math.round(bp.carbsGrams)}g carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
+      if (bp.totalGrams !== null) {
+        lines.push(`B${bp.bottleIndex + 1}: ${bp.bottleSize}ml — ${bp.totalGrams}g ${bp.mixName} (${formatScoops(bp.scoops)} scoops, ${Math.round(bp.carbsGrams)}g carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
+      } else {
+        lines.push(`B${bp.bottleIndex + 1}: ${bp.bottleSize}ml — ${formatScoops(bp.scoops)} scoops ${bp.mixName} (${Math.round(bp.carbsGrams)}g carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
+      }
     }
     lines.push('');
   }
