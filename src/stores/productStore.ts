@@ -61,7 +61,27 @@ export const useProductStore = create<ProductState>()(
     }),
     {
       name: 'carbz-products',
-      version: 1,
+      version: 2,
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as ProductState;
+        if (version < 2) {
+          // Add gramsPerScoop to default drink mixes
+          const gramsMap: Record<string, number> = {
+            'pf-carb-electrolyte': 25,
+            'gatorade-thirst-quencher': 34,
+            'skratch-labs': 22,
+            'maurten-320': 80,
+            'sis-beta-fuel': 86,
+          };
+          return {
+            ...state,
+            drinkMixes: state.drinkMixes.map((m) =>
+              gramsMap[m.id] ? { ...m, gramsPerScoop: gramsMap[m.id] } : m
+            ),
+          };
+        }
+        return state;
+      },
     }
   )
 );

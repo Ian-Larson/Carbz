@@ -58,6 +58,7 @@ export function calcBottlePreps(
       const carbsGrams = mix.carbsPerScoop * sel.scoops;
       const sodiumMg = mix.sodiumPerScoop * sel.scoops;
       const caffeineMg = mix.caffeinePerScoop * sel.scoops;
+      const totalGrams = mix.gramsPerScoop ? Math.round(mix.gramsPerScoop * sel.scoops) : null;
       // Concentration: grams of carbs per 100ml
       const concentration = (carbsGrams / bottle.size) * 100;
 
@@ -66,6 +67,7 @@ export function calcBottlePreps(
         bottleSize: bottle.size,
         mixName: mix.name,
         scoops: sel.scoops,
+        totalGrams,
         carbsGrams,
         sodiumMg,
         caffeineMg,
@@ -366,7 +368,11 @@ export function generateQuickSummary(
 
   // Mix instructions
   for (const bp of bottlePreps) {
-    parts.push(`Add ${formatScoops(bp.scoops)} scoops to B${bp.bottleIndex + 1}.`);
+    if (bp.totalGrams !== null) {
+      parts.push(`Add ${bp.totalGrams}g ${bp.mixName.split('(')[0].trim()} to B${bp.bottleIndex + 1}.`);
+    } else {
+      parts.push(`Add ${formatScoops(bp.scoops)} scoops to B${bp.bottleIndex + 1}.`);
+    }
   }
 
   // Solid instructions
