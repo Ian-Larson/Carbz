@@ -32,10 +32,10 @@ export function isDrinkMix(p: Product): p is DrinkMix {
 
 // ─── Bottle Configuration ────────────────────────────────────
 
-export type BottleSize = 550 | 750 | 950;
+export const COMMON_BOTTLE_SIZES = [550, 750, 950] as const;
 
 export interface BottleSlot {
-  size: BottleSize;
+  size: number;
   count: number;
 }
 
@@ -72,6 +72,8 @@ export interface RideConfig {
 
 // ─── Fuel Selections ─────────────────────────────────────────
 
+export type FuelMode = 'auto' | 'manual';
+
 export interface DrinkMixSelection {
   mixId: string;
   bottleIndex: number;
@@ -92,7 +94,7 @@ export interface FuelSelections {
 
 export interface BottlePrep {
   bottleIndex: number;
-  bottleSize: BottleSize;
+  bottleSize: number;
   mixName: string;
   scoops: number;
   carbsGrams: number;
@@ -110,7 +112,7 @@ export interface HourSegment {
   durationMinutes: number;
   bottles: Array<{
     bottleIndex: number;
-    bottleSize: BottleSize;
+    bottleSize: number;
     drinkMl: number;
     fractionLabel: string;
   }>;
