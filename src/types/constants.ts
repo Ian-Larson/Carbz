@@ -1,9 +1,15 @@
-import type { BottleSize, ConditionConfig, IntensityConfig } from './index';
+import type { ConditionConfig, IntensityConfig } from './index';
 
-export const BOTTLE_SIZES: BottleSize[] = [550, 750, 950];
-export const MAX_BOTTLES_ON_BIKE = 2;
+export const COMMON_BOTTLE_SIZES = [550, 750, 950] as const;
 
-export const DURATION_OPTIONS: number[] = Array.from({ length: 19 }, (_, i) => 30 + i * 15);
+export const DURATION_GROUPS = [
+  { label: 'Short', options: [30, 45, 60] },
+  { label: 'Medium', options: [75, 90, 105, 120, 135, 150] },
+  { label: 'Long', options: [165, 180, 210] },
+  { label: 'Epic', options: [240, 270, 300] },
+] as const;
+
+export const ALL_DURATION_OPTIONS: number[] = DURATION_GROUPS.flatMap(g => [...g.options]);
 
 export const CARB_TARGETS = [50, 60, 70, 80, 90] as const;
 
