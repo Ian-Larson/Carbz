@@ -155,7 +155,7 @@ export function RideSetupPanel() {
         <button
           type="button"
           onClick={() => moveToNextStep(completion)}
-          disabled={currentStep === 'review' || (!completion[currentStep] && currentStep !== 'review')}
+          disabled={currentStep === 'review' || !completion[currentStep]}
           className="inline-flex items-center gap-1 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm font-semibold text-[var(--accent-contrast)] hover:bg-[var(--accent-strong)] disabled:opacity-40"
         >
           {currentStep === 'fuel' ? 'Review' : 'Next'}
