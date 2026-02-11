@@ -24,41 +24,45 @@ export function BottleSelector() {
 
   return (
     <Card title="Bottles" icon="🍼">
-      <p className="mb-3 text-xs text-gray-400">What bottles are you bringing?</p>
+      <p className="mb-3 text-xs text-[var(--text-muted)]">What bottles are you bringing?</p>
       <div className="space-y-2">
         {bottles.map((bottle, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white p-2.5"
+            className="flex items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface-muted)] p-2.5"
           >
             <select
               value={bottle.size}
               onChange={(e) => setBottleSize(idx, Number(e.target.value))}
-              className="rounded-md border border-gray-200 px-2 py-1.5 text-sm font-medium text-gray-700 focus:border-primary-400 focus:outline-none"
+              className="rounded-md border border-[var(--line)] bg-[var(--surface)] px-2 py-1.5 text-sm font-medium text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
+              aria-label={`Bottle ${idx + 1} size`}
             >
               {COMMON_BOTTLE_SIZES.map((size) => (
                 <option key={size} value={size}>{size}ml</option>
               ))}
             </select>
             <div className="flex items-center gap-1 ml-auto">
-              <span className="text-xs text-gray-400 mr-1">qty</span>
+              <span className="text-xs text-[var(--text-muted)] mr-1">qty</span>
               <button
                 onClick={() => setBottleCount(idx, bottle.count - 1)}
-                className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-xs text-gray-500 hover:bg-gray-50"
+                className="flex h-7 w-7 items-center justify-center rounded border border-[var(--line)] text-xs text-[var(--text-primary)] hover:bg-[var(--surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                aria-label={`Decrease quantity for bottle ${idx + 1}`}
               >
                 -
               </button>
-              <span className="min-w-[1.5rem] text-center text-sm font-semibold">{bottle.count}</span>
+              <span className="min-w-[1.5rem] text-center text-sm font-semibold text-[var(--text-primary)]">{bottle.count}</span>
               <button
                 onClick={() => setBottleCount(idx, bottle.count + 1)}
-                className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-xs text-gray-500 hover:bg-gray-50"
+                className="flex h-7 w-7 items-center justify-center rounded border border-[var(--line)] text-xs text-[var(--text-primary)] hover:bg-[var(--surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                aria-label={`Increase quantity for bottle ${idx + 1}`}
               >
                 +
               </button>
             </div>
             <button
               onClick={() => removeBottle(idx)}
-              className="rounded p-1 text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500"
+              className="rounded p-1 text-[var(--text-muted)] transition-colors hover:bg-[var(--danger-soft)] hover:text-[var(--danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--danger)]"
+              aria-label={`Remove bottle ${idx + 1}`}
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -67,12 +71,12 @@ export function BottleSelector() {
       </div>
       <button
         onClick={() => addBottle(750)}
-        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600"
+        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-[var(--line-strong)] py-2 text-sm text-[var(--text-primary)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
       >
         <Plus className="h-4 w-4" /> Add Bottle
       </button>
       {guidance && (
-        <p className="mt-2 rounded-lg bg-amber-50 p-2 text-xs text-amber-700">
+        <p className="mt-2 rounded-xl bg-[var(--warning-soft)] p-2 text-xs text-[var(--text-primary)]">
           💡 {guidance}
         </p>
       )}

@@ -11,27 +11,31 @@ export function ProgressBar({
   target,
   label,
   icon,
-  colorClass = 'bg-green-500',
+  colorClass = 'bg-[var(--success)]',
 }: ProgressBarProps) {
   const pct = target > 0 ? Math.min((current / target) * 100, 100) : 0;
   const isOver = current > target;
   const isShort = current < target * 0.9;
-  const barColor = isShort ? 'bg-amber-400' : isOver ? 'bg-red-400' : colorClass;
+  const barColor = isShort ? 'bg-[var(--warning)]' : isOver ? 'bg-[var(--danger)]' : colorClass;
 
   return (
     <div>
       <div className="mb-1 flex items-center justify-between text-sm">
-        <span className="flex items-center gap-1.5 text-gray-600">
+        <span className="flex items-center gap-1.5 text-[var(--text-primary)]">
           {icon && <span>{icon}</span>}
           {label}
         </span>
-        <span className={`font-medium ${isShort ? 'text-amber-600' : isOver ? 'text-red-600' : 'text-green-600'}`}>
+        <span
+          className={`font-medium ${
+            isShort ? 'text-[var(--warning)]' : isOver ? 'text-[var(--danger)]' : 'text-[var(--success)]'
+          }`}
+        >
           {Math.round(current)}{target > 0 ? `/${Math.round(target)}` : ''}
         </span>
       </div>
-      <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+      <div className="h-2.5 w-full overflow-hidden rounded-full bg-[var(--surface-muted)]">
         <div
-          className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+          className={`h-full rounded-full transition-[width] duration-[var(--motion-medium)] motion-reduce:transition-none ${barColor}`}
           style={{ width: `${pct}%` }}
         />
       </div>

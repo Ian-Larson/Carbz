@@ -50,7 +50,7 @@ export function suggestFuelPlan(
         bottleIndex: bottle.index,
         scoops,
       });
-      carbsFromDrink += bestMix.carbsPerScoop * scoops;
+      carbsFromDrink += bestMix.carbsPerScoop * scoops * bottle.count;
     }
   }
 

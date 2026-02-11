@@ -30,17 +30,19 @@ export function ChipSelector<T extends string | number>({
         const isSelected = opt.value === selected;
         return (
           <button
+            type="button"
             key={String(opt.value)}
             onClick={() => onChange(opt.value)}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
               isSelected
-                ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-primary-300 hover:bg-primary-50'
+                ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--text-primary)]'
+                : 'border-[var(--line)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--line-strong)]'
             }`}
+            aria-pressed={isSelected}
           >
             {opt.label}
             {opt.sublabel && (
-              <span className={`block text-xs mt-0.5 ${isSelected ? 'text-primary-100' : 'text-gray-400'}`}>
+              <span className={`mt-0.5 block text-xs ${isSelected ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'}`}>
                 {opt.sublabel}
               </span>
             )}

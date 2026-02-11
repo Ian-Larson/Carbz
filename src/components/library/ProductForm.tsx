@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import type { DrinkMix, GelOrSolid } from '../../types';
 
@@ -79,18 +79,34 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
     }
   };
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onCancel]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30" onClick={onCancel}>
       <div
-        className="w-full max-w-md rounded-t-2xl bg-white p-5 shadow-xl"
+        className="w-full max-w-md rounded-t-2xl border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[var(--shadow-strong)]"
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={initial ? 'Edit product' : 'Add product'}
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">
             {initial ? 'Edit' : 'Add'} {type === 'drinkMix' ? 'Drink Mix' : 'Gel/Solid'}
           </h3>
-          <button onClick={onCancel} className="rounded-lg p-1 hover:bg-gray-100">
-            <X className="h-5 w-5 text-gray-400" />
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg p-1 text-[var(--text-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+            aria-label="Close product form"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
 
@@ -140,11 +156,11 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
           {type === 'solid' && (
             <>
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Type</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--text-primary)]">Type</label>
                 <select
                   value={solidType}
                   onChange={(e) => setSolidType(e.target.value as GelOrSolid['type'])}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[var(--line)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]"
                 >
                   <option value="gel">Gel</option>
                   <option value="chew">Chew</option>
@@ -160,7 +176,7 @@ export function ProductForm({ type, initial, onSave, onCancel }: ProductFormProp
           <button
             type="submit"
             disabled={!name.trim()}
-            className="w-full rounded-lg bg-primary-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
+            className="w-full rounded-lg bg-[var(--accent)] py-2.5 text-sm font-medium text-[var(--accent-contrast)] transition-colors hover:bg-[var(--accent-strong)] disabled:opacity-50"
           >
             {initial ? 'Save Changes' : 'Add Product'}
           </button>
@@ -185,13 +201,13 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-sm font-medium text-gray-700">{label}</label>
+      <label className="mb-1 block text-sm font-medium text-[var(--text-primary)]">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+        className="w-full rounded-lg border border-[var(--line)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-soft)]"
       />
     </div>
   );
