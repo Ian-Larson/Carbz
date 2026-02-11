@@ -95,6 +95,7 @@ export interface FuelSelections {
 
 export interface BottlePrep {
   bottleIndex: number;
+  quantity: number;
   bottleSize: number;
   mixName: string;
   scoops: number;
@@ -132,9 +133,12 @@ export interface HourSegment {
 }
 
 export interface Warning {
-  type: 'capacity' | 'concentration' | 'caffeine' | 'fluid' | 'carbs';
+  type: 'capacity' | 'concentration' | 'caffeine' | 'fluid' | 'carbs' | 'sodium';
   severity: 'info' | 'warning' | 'error';
   message: string;
+  context?: {
+    bottleIndex?: number;
+  };
 }
 
 export interface FuelPlanOutput {

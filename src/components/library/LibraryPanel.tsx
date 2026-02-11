@@ -34,29 +34,33 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
       <div className="space-y-6">
         {/* Drink Mixes */}
         <div>
-          <h3 className="mb-2 flex items-center gap-2 font-semibold text-gray-900">
+          <h3 className="mb-2 flex items-center gap-2 font-semibold text-[var(--text-primary)]">
             🧪 Drink Mixes
           </h3>
           <div className="space-y-2">
             {drinkMixes.map((mix) => (
-              <div key={mix.id} className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+              <div key={mix.id} className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--surface-muted)] p-3">
                 <div>
-                  <div className="text-sm font-medium text-gray-900">{mix.name}</div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-sm font-medium text-[var(--text-primary)]">{mix.name}</div>
+                  <div className="text-xs text-[var(--text-muted)]">
                     {mix.carbsPerScoop}g carbs · {mix.sodiumPerScoop}mg Na · {mix.caloriesPerScoop} kcal/scoop
                   </div>
                 </div>
                 <div className="flex gap-1">
                   <button
+                    type="button"
                     onClick={() => setForm({ mode: 'editMix', mix })}
-                    className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                    className="rounded p-1.5 text-[var(--text-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+                    aria-label={`Edit ${mix.name}`}
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
                   {!mix.isDefault && (
                     <button
+                      type="button"
                       onClick={() => removeDrinkMix(mix.id)}
-                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                      className="rounded p-1.5 text-[var(--text-muted)] hover:bg-[var(--danger-soft)] hover:text-[var(--danger)]"
+                      aria-label={`Delete ${mix.name}`}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -66,8 +70,9 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
             ))}
           </div>
           <button
+            type="button"
             onClick={() => setForm({ mode: 'addMix' })}
-            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600"
+            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-[var(--line-strong)] py-2 text-sm text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <Plus className="h-4 w-4" /> Add Drink Mix
           </button>
@@ -75,15 +80,15 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
 
         {/* Gels & Solids */}
         <div>
-          <h3 className="mb-2 flex items-center gap-2 font-semibold text-gray-900">
+          <h3 className="mb-2 flex items-center gap-2 font-semibold text-[var(--text-primary)]">
             🍬 Gels & Solids
           </h3>
           <div className="space-y-2">
             {solids.map((solid) => (
-              <div key={solid.id} className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+              <div key={solid.id} className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--surface-muted)] p-3">
                 <div>
-                  <div className="text-sm font-medium text-gray-900">{solid.name}</div>
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="text-sm font-medium text-[var(--text-primary)]">{solid.name}</div>
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
                     <span>{solid.carbsPerServing}g carbs · {solid.caloriesPerServing} kcal</span>
                     <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
                       {solid.type}
@@ -92,15 +97,19 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
                 </div>
                 <div className="flex gap-1">
                   <button
+                    type="button"
                     onClick={() => setForm({ mode: 'editSolid', solid })}
-                    className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                    className="rounded p-1.5 text-[var(--text-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+                    aria-label={`Edit ${solid.name}`}
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
                   {!solid.isDefault && (
                     <button
+                      type="button"
                       onClick={() => removeSolid(solid.id)}
-                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                      className="rounded p-1.5 text-[var(--text-muted)] hover:bg-[var(--danger-soft)] hover:text-[var(--danger)]"
+                      aria-label={`Delete ${solid.name}`}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -110,8 +119,9 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
             ))}
           </div>
           <button
+            type="button"
             onClick={() => setForm({ mode: 'addSolid' })}
-            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600"
+            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-[var(--line-strong)] py-2 text-sm text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <Plus className="h-4 w-4" /> Add Gel/Solid
           </button>
@@ -120,32 +130,35 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
         {/* Presets */}
         {presets.length > 0 && (
           <div>
-            <h3 className="mb-2 flex items-center gap-2 font-semibold text-gray-900">
+            <h3 className="mb-2 flex items-center gap-2 font-semibold text-[var(--text-primary)]">
               💾 Saved Presets
             </h3>
             <div className="space-y-2">
               {presets.map((preset) => (
-                <div key={preset.id} className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+                <div key={preset.id} className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--surface-muted)] p-3">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{preset.name}</div>
-                    <div className="text-xs text-gray-400">
+                    <div className="text-sm font-medium text-[var(--text-primary)]">{preset.name}</div>
+                    <div className="text-xs text-[var(--text-muted)]">
                       {formatDuration(preset.rideConfig.durationMinutes)} · {preset.rideConfig.carbTargetPerHour}g/hr · {preset.rideConfig.condition}
                     </div>
                   </div>
                   <div className="flex gap-1">
                     <button
+                      type="button"
                       onClick={() => {
                         loadRideConfig(preset.rideConfig);
                         loadFuelSelections(preset.fuelSelections);
                         onClose();
                       }}
-                      className="rounded bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100"
+                      className="rounded bg-[var(--accent-soft)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--surface-muted)]"
                     >
                       Load
                     </button>
                     <button
+                      type="button"
                       onClick={() => deletePreset(preset.id)}
-                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                      className="rounded p-1.5 text-[var(--text-muted)] hover:bg-[var(--danger-soft)] hover:text-[var(--danger)]"
+                      aria-label={`Delete preset ${preset.name}`}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -158,8 +171,9 @@ export function LibraryPanel({ open, onClose }: LibraryPanelProps) {
 
         {/* Reset to Defaults */}
         <button
+          type="button"
           onClick={resetToDefaults}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--line)] py-2 text-sm text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-muted)]"
         >
           <RotateCcw className="h-3.5 w-3.5" /> Reset Products to Defaults
         </button>

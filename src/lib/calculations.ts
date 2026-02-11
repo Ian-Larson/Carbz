@@ -55,22 +55,24 @@ export function calcBottlePreps(
       const mix = mixes.find(m => m.id === sel.mixId);
       if (!mix || sel.scoops === 0) continue;
 
-      const carbsGrams = mix.carbsPerScoop * sel.scoops;
-      const sodiumMg = mix.sodiumPerScoop * sel.scoops;
-      const caffeineMg = mix.caffeinePerScoop * sel.scoops;
+      const quantity = bottle.count;
+      const carbsPerBottle = mix.carbsPerScoop * sel.scoops;
+      const sodiumPerBottle = mix.sodiumPerScoop * sel.scoops;
+      const caffeinePerBottle = mix.caffeinePerScoop * sel.scoops;
       const totalGrams = mix.gramsPerScoop ? Math.round(mix.gramsPerScoop * sel.scoops) : null;
       // Concentration: grams of carbs per 100ml
-      const concentration = (carbsGrams / bottle.size) * 100;
+      const concentration = (carbsPerBottle / bottle.size) * 100;
 
       preps.push({
         bottleIndex: idx,
+        quantity,
         bottleSize: bottle.size,
         mixName: mix.name,
         scoops: sel.scoops,
         totalGrams,
-        carbsGrams,
-        sodiumMg,
-        caffeineMg,
+        carbsGrams: carbsPerBottle * quantity,
+        sodiumMg: sodiumPerBottle * quantity,
+        caffeineMg: caffeinePerBottle * quantity,
         concentration,
         concentrationLabel: getConcentrationLabel(concentration),
       });
@@ -120,7 +122,7 @@ export function calcHourlyPlan(
   const totalDrinkCaffeine = bottlePreps.reduce((s, b) => s + b.caffeineMg, 0);
   const totalDrinkCalories = bottlePreps.reduce((s, b) => {
     const mix = products.mixes.find(m => m.name === b.mixName);
-    return s + (mix ? mix.caloriesPerScoop * b.scoops : 0);
+    return s + (mix ? mix.caloriesPerScoop * b.scoops * b.quantity : 0);
   }, 0);
 
   const segments: HourSegment[] = [];
@@ -220,14 +222,14 @@ export function calcTotals(
   const drinkCaffeine = bottlePreps.reduce((s, b) => s + b.caffeineMg, 0);
   const drinkCalories = bottlePreps.reduce((s, b) => {
     const mix = products.mixes.find(m => m.name === b.mixName);
-    return s + (mix ? mix.caloriesPerScoop * b.scoops : 0);
+    return s + (mix ? mix.caloriesPerScoop * b.scoops * b.quantity : 0);
   }, 0);
 
   let drinkCost: number | null = 0;
   for (const bp of bottlePreps) {
     const mix = products.mixes.find(m => m.name === bp.mixName);
     if (mix?.costPerServing != null) {
-      drinkCost! += mix.costPerServing * bp.scoops;
+      drinkCost! += mix.costPerServing * bp.scoops * bp.quantity;
     } else {
       drinkCost = null;
       break;
@@ -272,6 +274,7 @@ export function calcTotals(
 export function generateWarnings(
   totals: ReturnType<typeof calcTotals>,
   bottlePreps: BottlePrep[],
+  rideConfig: RideConfig,
   preferences: UserPreferences
 ): Warning[] {
   const warnings: Warning[] = [];
@@ -311,6 +314,7 @@ export function generateWarnings(
         type: 'concentration',
         severity: 'warning',
         message: `B${bp.bottleIndex + 1} concentration is ${bp.concentration.toFixed(1)}% — may cause GI issues. Consider spreading across bottles.`,
+        context: { bottleIndex: bp.bottleIndex },
       });
     }
   }
@@ -331,16 +335,19 @@ export function generateWarnings(
   if (preferences.sweatRate) {
     const sodiumTarget = SWEAT_RATE_SODIUM[preferences.sweatRate];
     if (sodiumTarget) {
-      const durationHours = totals.targetFluidMl / (totals.targetFluidMl > 0 ? totals.targetFluidMl / (totals.targetFluidMl / 700) : 1);
-      // Simple: just compare total sodium to target * hours implied by fluid target
-      // Actually let's use the ride duration from the carb target
-      const rideHours = totals.targetCarbs > 0 ? totals.targetCarbs / 80 : 1; // rough estimate
-      const targetSodium = sodiumTarget.mgPerHour * Math.max(rideHours, durationHours);
+      const rideHours = rideConfig.durationMinutes / 60;
+      const targetSodium = sodiumTarget.mgPerHour * rideHours;
       if (totals.totalSodiumMg < targetSodium * 0.7) {
         warnings.push({
-          type: 'capacity',
+          type: 'sodium',
+          severity: 'warning',
+          message: `Sodium is low for a ${preferences.sweatRate} sweat rate. Target about ${Math.round(targetSodium)}mg total; increase sodium mix or add salt tabs.`,
+        });
+      } else if (totals.totalSodiumMg > targetSodium * 1.5) {
+        warnings.push({
+          type: 'sodium',
           severity: 'info',
-          message: `Sodium is low for a ${preferences.sweatRate} sweater. Consider a higher-sodium mix or salt tabs.`,
+          message: `Sodium is high for this ride (${Math.round(totals.totalSodiumMg)}mg vs ${Math.round(targetSodium)}mg target). Reduce sodium concentration if you feel bloated.`,
         });
       }
     }
@@ -368,10 +375,11 @@ export function generateQuickSummary(
 
   // Mix instructions
   for (const bp of bottlePreps) {
+    const bottleLabel = bp.quantity > 1 ? `B${bp.bottleIndex + 1} x${bp.quantity}` : `B${bp.bottleIndex + 1}`;
     if (bp.totalGrams !== null) {
-      parts.push(`Add ${bp.totalGrams}g ${bp.mixName.split('(')[0].trim()} to B${bp.bottleIndex + 1}.`);
+      parts.push(`Add ${bp.totalGrams}g ${bp.mixName.split('(')[0].trim()} to ${bottleLabel}${bp.quantity > 1 ? ' (each bottle)' : ''}.`);
     } else {
-      parts.push(`Add ${formatScoops(bp.scoops)} scoops to B${bp.bottleIndex + 1}.`);
+      parts.push(`Add ${formatScoops(bp.scoops)} scoops to ${bottleLabel}${bp.quantity > 1 ? ' (each bottle)' : ''}.`);
     }
   }
 
@@ -404,7 +412,7 @@ export function computeFuelPlan(
   const bottlePreps = calcBottlePreps(rideConfig.bottles, fuelSelections.drinkMixes, products.mixes);
   const hourlyPlan = calcHourlyPlan(rideConfig, fuelSelections, products);
   const totals = calcTotals(rideConfig, fuelSelections, products);
-  const warnings = generateWarnings(totals, bottlePreps, preferences);
+  const warnings = generateWarnings(totals, bottlePreps, rideConfig, preferences);
   const quickSummary = generateQuickSummary(rideConfig, bottlePreps, fuelSelections, products);
 
   return {

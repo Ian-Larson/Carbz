@@ -73,10 +73,11 @@ export function formatPlanAsText(plan: FuelPlanOutput): string {
   if (plan.bottlePreps.length > 0) {
     lines.push('--- BOTTLE PREP ---');
     for (const bp of plan.bottlePreps) {
+      const quantityLabel = bp.quantity > 1 ? ` x${bp.quantity}` : '';
       if (bp.totalGrams !== null) {
-        lines.push(`B${bp.bottleIndex + 1}: ${bp.bottleSize}ml — ${bp.totalGrams}g ${bp.mixName} (${formatScoops(bp.scoops)} scoops, ${Math.round(bp.carbsGrams)}g carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
+        lines.push(`B${bp.bottleIndex + 1}${quantityLabel}: ${bp.bottleSize}ml — ${bp.totalGrams}g ${bp.mixName} per bottle (${formatScoops(bp.scoops)} scoops, ${Math.round(bp.carbsGrams)}g total carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
       } else {
-        lines.push(`B${bp.bottleIndex + 1}: ${bp.bottleSize}ml — ${formatScoops(bp.scoops)} scoops ${bp.mixName} (${Math.round(bp.carbsGrams)}g carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
+        lines.push(`B${bp.bottleIndex + 1}${quantityLabel}: ${bp.bottleSize}ml — ${formatScoops(bp.scoops)} scoops ${bp.mixName} per bottle (${Math.round(bp.carbsGrams)}g total carbs, ${bp.concentration.toFixed(1)}% ${bp.concentrationLabel})`);
       }
     }
     lines.push('');

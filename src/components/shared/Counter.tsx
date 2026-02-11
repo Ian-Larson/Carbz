@@ -16,20 +16,22 @@ export function Counter({ value, onChange, min = 0, max = 99, step = 1, suffix }
   return (
     <div className="flex items-center gap-2">
       <button
+        type="button"
         onClick={() => canDecrement && onChange(Math.round((value - step) * 100) / 100)}
         disabled={!canDecrement}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:hover:bg-transparent"
         aria-label="Decrease"
       >
         <Minus className="h-4 w-4" />
       </button>
-      <span className="min-w-[2rem] text-center font-semibold text-gray-900">
-        {value}{suffix && <span className="text-xs text-gray-400 ml-0.5">{suffix}</span>}
+      <span className="min-w-[2rem] text-center font-semibold text-[var(--text-primary)]">
+        {value}{suffix && <span className="ml-0.5 text-xs text-[var(--text-muted)]">{suffix}</span>}
       </span>
       <button
+        type="button"
         onClick={() => canIncrement && onChange(Math.round((value + step) * 100) / 100)}
         disabled={!canIncrement}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:hover:bg-transparent"
         aria-label="Increase"
       >
         <Plus className="h-4 w-4" />

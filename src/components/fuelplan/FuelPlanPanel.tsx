@@ -27,33 +27,36 @@ export function FuelPlanPanel() {
       {/* Save as preset */}
       {!showSave ? (
         <button
+          type="button"
           onClick={() => setShowSave(true)}
-          className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-[var(--line)] bg-[var(--surface)] py-2.5 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:border-[var(--line-strong)] hover:bg-[var(--surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
         >
           <Save className="h-4 w-4" />
           Save as Preset
         </button>
       ) : (
-        <div className="flex gap-2 rounded-xl border border-gray-200 bg-white p-3">
+        <div className="flex flex-wrap gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface)] p-3">
           <input
             type="text"
             value={presetName}
             onChange={(e) => setPresetName(e.target.value)}
             placeholder="Preset name..."
-            className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+            className="min-w-[180px] flex-1 rounded-lg border border-[var(--line)] bg-[var(--surface-muted)] px-3 py-1.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-soft)]"
             autoFocus
             onKeyDown={(e) => e.key === 'Enter' && handleSave()}
           />
           <button
+            type="button"
             onClick={handleSave}
             disabled={!presetName.trim()}
-            className="rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+            className="rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm font-semibold text-[var(--accent-contrast)] hover:bg-[var(--accent-strong)] disabled:opacity-50"
           >
             Save
           </button>
           <button
+            type="button"
             onClick={() => setShowSave(false)}
-            className="rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-100"
+            className="rounded-lg px-2 py-1.5 text-sm font-medium text-[var(--text-muted)] hover:bg-[var(--surface-muted)]"
           >
             Cancel
           </button>
